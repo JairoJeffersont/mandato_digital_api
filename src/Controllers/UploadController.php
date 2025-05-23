@@ -27,8 +27,8 @@ class UploadController
         $uploadedFile = $uploadedFiles['file'];
         
         $directory = __DIR__ . '/../../public/uploads';
-        $allowedTypes = ['image/jpeg', 'image/png', 'application/pdf', 'text/plain'];
-        $maxSize = 5;
+        $allowedTypes = ['image/jpg', 'image/jpeg', 'image/png', 'application/psd', 'image/vnd.adobe.photoshop', 'application/ai', 'application/illustrator', 'application/postscript', 'application/pdf', 'application/eps', 'application/vnd.adobe.illustrator', 'application/cdr', 'application/x-cdr', 'application/coreldraw', 'image/x-coreldraw'];
+        $maxSize = 500;
         
         $file = [
             'name' => $uploadedFile->getClientFilename(),
