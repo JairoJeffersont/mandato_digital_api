@@ -26,7 +26,7 @@ API da aplicação Mandato Digital
 
 1. Clone o repositório:
 ```bash
-git clone [url-do-repositorio]
+git clone https://github.com/JairoJeffersont/mandato_digital_api.git api
 ```
 
 2. Instale as dependências:
