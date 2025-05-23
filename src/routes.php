@@ -36,6 +36,7 @@ use Slim\Routing\RouteCollectorProxy;
 
 $app->group('/api', function (RouteCollectorProxy $group) {
     // Public routes
+    
     $group->post('/login', [AuthController::class, 'login']);
     $group->get('/gabinete-tipo', [GabineteTipoController::class, 'getAll']);
     $group->post('/usuario', [UsuarioController::class, 'create']);
