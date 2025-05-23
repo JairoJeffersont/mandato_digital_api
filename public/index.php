@@ -1,13 +1,15 @@
 <?php
 
 use Slim\Factory\AppFactory;
+use App\Middleware\ErrorHandlerMiddleware;
 
 require __DIR__ . '/../vendor/autoload.php';
 require __DIR__ . '/../bootstrap.php';
 
 $app = AppFactory::create();
 
-$app->addErrorMiddleware(true, true, true);
+// Adiciona o middleware de tratamento de erros personalizado
+$app->add(new ErrorHandlerMiddleware());
 
 // Middleware para CORS
 $app->add(function ($request, $handler) {
