@@ -1,6 +1,6 @@
-# API Slim Framework
+# API Mandato Digital
 
-Uma API RESTful construída com o Slim Framework 4, oferecendo uma estrutura robusta e escalável para desenvolvimento de serviços web.
+API da aplicação Mandato Digital
 
 ## 🚀 Tecnologias Utilizadas
 
