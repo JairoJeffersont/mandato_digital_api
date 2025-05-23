@@ -1,0 +1,1762 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Documentation</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
+    <style>
+        .endpoint {
+            border-left: 4px solid #dee2e6;
+            margin-bottom: 20px;
+            padding-left: 15px;
+        }
+        .get { border-left-color: #28a745; }
+        .post { border-left-color: #007bff; }
+        .put { border-left-color: #ffc107; }
+        .delete { border-left-color: #dc3545; }
+        .method {
+            font-weight: bold;
+            padding: 4px 8px;
+            border-radius: 4px;
+            color: white;
+            display: inline-block;
+            min-width: 80px;
+            text-align: center;
+        }
+        .get-method { background-color: #28a745; }
+        .post-method { background-color: #007bff; }
+        .put-method { background-color: #ffc107; }
+        .delete-method { background-color: #dc3545; }
+        .nav-pills .nav-link.active {
+            background-color: #6c757d;
+        }
+        pre {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+        }
+        .sticky-top {
+            top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="#">API Documentation</a>
+        </div>
+    </nav>
+
+    <div class="container my-5">
+        <div class="row">
+            <!-- Sidebar Navigation -->
+            <div class="col-md-3">
+                <nav id="sidebar" class="sticky-top">
+                    <div class="nav flex-column nav-pills">
+                        <a class="nav-link active" href="#auth">Autenticação</a>
+                        <a class="nav-link" href="#upload">Upload de Arquivos</a>
+                        <a class="nav-link" href="#gabinete">Gabinete</a>
+                        <a class="nav-link" href="#gabinete-tipo">Gabinete Tipo</a>
+                        <a class="nav-link" href="#usuario">Usuário</a>
+                        <a class="nav-link" href="#usuario-tipo">Usuário Tipo</a>
+                        <a class="nav-link" href="#orgao">Órgão</a>
+                        <a class="nav-link" href="#orgao-tipo">Órgão Tipo</a>
+                        <a class="nav-link" href="#pessoa">Pessoa</a>
+                        <a class="nav-link" href="#pessoa-tipo">Pessoa Tipo</a>
+                        <a class="nav-link" href="#pessoa-profissao">Pessoa Profissão</a>
+                        <a class="nav-link" href="#documento">Documento</a>
+                        <a class="nav-link" href="#documento-tipo">Documento Tipo</a>
+                        <a class="nav-link" href="#emenda">Emenda</a>
+                        <a class="nav-link" href="#emenda-status">Emenda Status</a>
+                        <a class="nav-link" href="#emenda-objetivo">Emenda Objetivo</a>
+                        <a class="nav-link" href="#postagem">Postagem</a>
+                        <a class="nav-link" href="#postagem-status">Postagem Status</a>
+                        <a class="nav-link" href="#clipping">Clipping</a>
+                        <a class="nav-link" href="#clipping-tipo">Clipping Tipo</a>
+                    </div>
+                </nav>
+            </div>
+
+            <!-- Main Content -->
+            <div class="col-md-9">
+                <!-- Authentication -->
+                <section id="auth" class="mb-5">
+                    <h2 class="mb-4">Autenticação</h2>
+                    <div class="endpoint post">
+                        <span class="method post-method">POST</span>
+                        <code class="ms-2">/api/login</code>
+                        <div class="mt-3">
+                            <h5>Parâmetros (JSON)</h5>
+                            <pre>{
+    "usuario_email": "string",
+    "usuario_senha": "string"
+}</pre>
+                            <h5>Resposta</h5>
+                            <pre>{
+    "status": "success",
+    "message": "Login realizado com sucesso",
+    "data": {
+        "token": "string",
+        "usuario": {
+            "usuario_id": "string",
+            "usuario_nome": "string",
+            "usuario_email": "string",
+            "usuario_tipo": "string",
+            "usuario_gestor": boolean,
+            "usuario_gabinete": "string"
+        }
+    }
+}</pre>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Upload de Arquivos -->
+                <section id="upload" class="mb-5">
+                    <h2 class="mb-4">Upload de Arquivos</h2>
+                    <div class="endpoint post">
+                        <span class="method post-method">POST</span>
+                        <code class="ms-2">/api/upload</code>
+                        <div class="mt-3">
+                            <h5>Autenticação</h5>
+                            <pre>Bearer Token necessário</pre>
+                            
+                            <h5>Parâmetros (multipart/form-data)</h5>
+                            <pre>file: File (arquivo para upload)</pre>
+                            
+                            <h5>Tipos de Arquivo Permitidos</h5>
+                            <pre>- image/jpeg
+- image/png
+- application/pdf
+- text/plain</pre>
+
+                            <h5>Limite de Tamanho</h5>
+                            <pre>Máximo: 5MB</pre>
+
+                            <h5>Resposta de Sucesso (200)</h5>
+                            <pre>{
+    "status": "success",
+    "message": "Arquivo enviado com sucesso",
+    "data": {
+        "file_path": "/uploads/nome_do_arquivo.extensao"
+    }
+}</pre>
+
+                            <h5>Resposta de Erro (400)</h5>
+                            <pre>{
+    "status": "error",
+    "message": "Mensagem de erro específica",
+    "data": null
+}</pre>
+
+                            <h5>Possíveis Mensagens de Erro</h5>
+                            <pre>- "Nenhum arquivo foi enviado"
+- "File type not allowed"
+- "File exceeds the limit of 5 MB"
+- "Failed to create the destination directory"
+- "File already exists in the directory"
+- "Failed to move the file"</pre>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Gabinete -->
+                <section id="gabinete" class="mb-5">
+                    <h2 class="mb-4">Gabinete</h2>
+                    
+                    <!-- GET All -->
+                    <div class="endpoint get">
+                        <span class="method get-method">GET</span>
+                        <code class="ms-2">/api/gabinete</code>
+                        <div class="mt-3">
+                            <h5>Resposta</h5>
+                            <pre>{
+    "status": "success",
+    "data": [
+        {
+            "gabinete_id": "string",
+            "gabinete_nome": "string",
+            "gabinete_tipo": "string",
+            "gabinete_status": "boolean"
+        }
+    ]
+}</pre>
+                        </div>
+                    </div>
+
+                    <!-- POST -->
+                    <div class="endpoint post">
+                        <span class="method post-method">POST</span>
+                        <code class="ms-2">/api/gabinete</code>
+                        <div class="mt-3">
+                            <h5>Parâmetros (JSON)</h5>
+                            <pre>{
+    "gabinete_nome": "string",
+    "gabinete_tipo": "string"
+}</pre>
+                        </div>
+                    </div>
+
+                    <!-- Similar structure for other endpoints -->
+                </section>
+
+                <!-- Usuario Tipo -->
+                <section id="usuario-tipo" class="mb-5">
+                    <h2 class="mb-4">Usuário Tipo</h2>
+                    
+                    <!-- GET All -->
+                    <div class="endpoint get">
+                        <span class="method get-method">GET</span>
+                        <code class="ms-2">/api/usuario-tipo</code>
+                        <div class="mt-3">
+                            <h5>Resposta</h5>
+                            <pre>{
+    "status": "success",
+    "data": [
+        {
+            "usuario_tipo_id": "string",
+            "usuario_tipo_nome": "string",
+            "usuario_tipo_descricao": "string"
+        }
+    ]
+}</pre>
+                        </div>
+                    </div>
+
+                    <!-- GET By ID -->
+                    <div class="endpoint get">
+                        <span class="method get-method">GET</span>
+                        <code class="ms-2">/api/usuario-tipo/{id}</code>
+                        <div class="mt-3">
+                            <h5>Parâmetros URL</h5>
+                            <pre>id: string (UUID do tipo de usuário)</pre>
+                            <h5>Resposta</h5>
+                            <pre>{
+    "status": "success",
+    "data": {
+        "usuario_tipo_id": "string",
+        "usuario_tipo_nome": "string",
+        "usuario_tipo_descricao": "string"
+    }
+}</pre>
+                        </div>
+                    </div>
+
+                    <!-- POST -->
+                    <div class="endpoint post">
+                        <span class="method post-method">POST</span>
+                        <code class="ms-2">/api/usuario-tipo</code>
+                        <div class="mt-3">
+                            <h5>Parâmetros (JSON)</h5>
+                            <pre>{
+    "usuario_tipo_nome": "string",
+    "usuario_tipo_descricao": "string"
+}</pre>
+                        </div>
+                    </div>
+
+                    <!-- PUT -->
+                    <div class="endpoint put">
+                        <span class="method put-method">PUT</span>
+                        <code class="ms-2">/api/usuario-tipo/{id}</code>
+                        <div class="mt-3">
+                            <h5>Parâmetros URL</h5>
+                            <pre>id: string (UUID do tipo de usuário)</pre>
+                            <h5>Parâmetros (JSON)</h5>
+                            <pre>{
+    "usuario_tipo_nome": "string",
+    "usuario_tipo_descricao": "string"
+}</pre>
+                        </div>
+                    </div>
+
+                    <!-- DELETE -->
+                    <div class="endpoint delete">
+                        <span class="method delete-method">DELETE</span>
+                        <code class="ms-2">/api/usuario-tipo/{id}</code>
+                        <div class="mt-3">
+                            <h5>Parâmetros URL</h5>
+                            <pre>id: string (UUID do tipo de usuário)</pre>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Usuario -->
+                <section id="usuario" class="mb-5">
+                    <h2 class="mb-4">Usuário</h2>
+                    
+                    <!-- GET All -->
+                    <div class="endpoint get">
+                        <span class="method get-method">GET</span>
+                        <code class="ms-2">/api/usuario/{gabinete}</code>
+                        <div class="mt-3">
+                            <h5>Parâmetros URL</h5>
+                            <pre>gabinete: string (UUID do gabinete)</pre>
+                            <h5>Resposta</h5>
+                            <pre>{
+    "status": "success",
+    "data": [
+        {
+            "usuario_id": "string",
+            "usuario_nome": "string",
+            "usuario_email": "string",
+            "usuario_tipo": "string",
+            "usuario_gabinete": "string",
+            "usuario_ativo": "boolean"
+            "usuario_gestor": boolean,
+        }
+    ]
+}</pre>
+                        </div>
+                    </div>
+
+                    <!-- GET By ID -->
+                    <div class="endpoint get">
+                        <span class="method get-method">GET</span>
+                        <code class="ms-2">/api/usuario/detalhe/{id}</code>
+                        <div class="mt-3">
+                            <h5>Parâmetros URL</h5>
+                            <pre>id: string (UUID do usuário)</pre>
+                            <h5>Resposta</h5>
+                            <pre>{
+    "status": "success",
+    "data": {
+        "usuario_id": "string",
+        "usuario_nome": "string",
+        "usuario_email": "string",
+        "usuario_tipo": "string",
+        "usuario_gabinete": "string",
+        "usuario_ativo": "boolean",
+        "usuario_gestor": "boolean"
+    }
+}</pre>
+                        </div>
+                    </div>
+
+                    <!-- POST -->
+                    <div class="endpoint post">
+                        <span class="method post-method">POST</span>
+                        <code class="ms-2">/api/usuario</code>
+                        <div class="mt-3">
+                            <h5>Parâmetros (JSON)</h5>
+                            <pre>{
+    "usuario_nome": "string",
+    "usuario_email": "string",
+    "usuario_senha": "string",
+    "usuario_tipo": "string",
+    "usuario_gabinete": "string",
+    "usuario_gestor": "boolean"
+}</pre>
+                        </div>
+                    </div>
+
+                    <!-- PUT -->
+                    <div class="endpoint put">
+                        <span class="method put-method">PUT</span>
+                        <code class="ms-2">/api/usuario/{id}</code>
+                        <div class="mt-3">
+                            <h5>Parâmetros URL</h5>
+                            <pre>id: string (UUID do usuário)</pre>
+                            <h5>Parâmetros (JSON)</h5>
+                            <pre>{
+    "usuario_nome": "string",
+    "usuario_email": "string",
+    "usuario_senha": "string",
+    "usuario_tipo": "string"
+}</pre>
+                        </div>
+                    </div>
+
+                    <!-- DELETE -->
+                    <div class="endpoint delete">
+                        <span class="method delete-method">DELETE</span>
+                        <code class="ms-2">/api/usuario/{id}</code>
+                        <div class="mt-3">
+                            <h5>Parâmetros URL</h5>
+                            <pre>id: string (UUID do usuário)</pre>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Orgao Tipo -->
+                <section id="orgao-tipo" class="mb-5">
+                    <h2 class="mb-4">Órgão Tipo</h2>
+                    
+                    <!-- GET All -->
+                    <div class="endpoint get">
+                        <span class="method get-method">GET</span>
+                        <code class="ms-2">/api/orgao-tipo/{gabinete}</code>
+                        <div class="mt-3">
+                            <h5>Parâmetros URL</h5>
+                            <pre>gabinete: string (UUID do gabinete)</pre>
+                            <h5>Resposta</h5>
+                            <pre>{
+    "status": "success",
+    "data": [
+        {
+            "orgao_tipo_id": "string",
+            "orgao_tipo_nome": "string",
+            "orgao_tipo_descricao": "string",
+            "orgao_tipo_criado_por": "string",
+            "orgao_tipo_gabinete": "string"
+        }
+    ]
+}</pre>
+                        </div>
+                    </div>
+
+                    <!-- GET By ID -->
+                    <div class="endpoint get">
+                        <span class="method get-method">GET</span>
+                        <code class="ms-2">/api/orgao-tipo/detalhe/{id}</code>
+                        <div class="mt-3">
+                            <h5>Parâmetros URL</h5>
+                            <pre>id: string (UUID do tipo de órgão)</pre>
+                            <h5>Resposta</h5>
+                            <pre>{
+    "status": "success",
+    "data": {
+        "orgao_tipo_id": "string",
+        "orgao_tipo_nome": "string",
+        "orgao_tipo_descricao": "string",
+        "orgao_tipo_criado_por": "string",
+        "orgao_tipo_gabinete": "string"
+    }
+}</pre>
+                        </div>
+                    </div>
+
+                    <!-- POST -->
+                    <div class="endpoint post">
+                        <span class="method post-method">POST</span>
+                        <code class="ms-2">/api/orgao-tipo</code>
+                        <div class="mt-3">
+                            <h5>Parâmetros (JSON)</h5>
+                            <pre>{
+    "orgao_tipo_nome": "string",
+    "orgao_tipo_descricao": "string",
+    "orgao_tipo_criado_por": "string",
+    "orgao_tipo_gabinete": "string"
+}</pre>
+                        </div>
+                    </div>
+
+                    <!-- PUT -->
+                    <div class="endpoint put">
+                        <span class="method put-method">PUT</span>
+                        <code class="ms-2">/api/orgao-tipo/{id}</code>
+                        <div class="mt-3">
+                            <h5>Parâmetros URL</h5>
+                            <pre>id: string (UUID do tipo de órgão)</pre>
+                            <h5>Parâmetros (JSON)</h5>
+                            <pre>{
+    "orgao_tipo_nome": "string",
+    "orgao_tipo_descricao": "string"
+}</pre>
+                        </div>
+                    </div>
+
+                    <!-- DELETE -->
+                    <div class="endpoint delete">
+                        <span class="method delete-method">DELETE</span>
+                        <code class="ms-2">/api/orgao-tipo/{id}</code>
+                        <div class="mt-3">
+                            <h5>Parâmetros URL</h5>
+                            <pre>id: string (UUID do tipo de órgão)</pre>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Orgao -->
+                <section id="orgao" class="mb-5">
+                    <h2 class="mb-4">Órgão</h2>
+                    
+                    <!-- GET All -->
+                    <div class="endpoint get">
+                        <span class="method get-method">GET</span>
+                        <code class="ms-2">/api/orgao/{gabinete}</code>
+                        <div class="mt-3">
+                            <h5>Parâmetros URL</h5>
+                            <pre>gabinete: string (UUID do gabinete)</pre>
+                            <h5>Resposta</h5>
+                            <pre>{
+    "status": "success",
+    "data": [
+        {
+            "orgao_id": "string",
+            "orgao_nome": "string",
+            "orgao_tipo": "string",
+            "orgao_descricao": "string",
+            "orgao_contato": "string",
+            "orgao_endereco": "string",
+            "orgao_criado_por": "string",
+            "orgao_gabinete": "string"
+        }
+    ]
+}</pre>
+                        </div>
+                    </div>
+
+                    <!-- GET By ID -->
+                    <div class="endpoint get">
+                        <span class="method get-method">GET</span>
+                        <code class="ms-2">/api/orgao/detalhe/{id}</code>
+                        <div class="mt-3">
+                            <h5>Parâmetros URL</h5>
+                            <pre>id: string (UUID do órgão)</pre>
+                            <h5>Resposta</h5>
+                            <pre>{
+    "status": "success",
+    "data": {
+        "orgao_id": "string",
+        "orgao_nome": "string",
+        "orgao_tipo": "string",
+        "orgao_descricao": "string",
+        "orgao_contato": "string",
+        "orgao_endereco": "string",
+        "orgao_criado_por": "string",
+        "orgao_gabinete": "string"
+    }
+}</pre>
+                        </div>
+                    </div>
+
+                    <!-- POST -->
+                    <div class="endpoint post">
+                        <span class="method post-method">POST</span>
+                        <code class="ms-2">/api/orgao</code>
+                        <div class="mt-3">
+                            <h5>Parâmetros (JSON)</h5>
+                            <pre>{
+    "orgao_nome": "string",
+    "orgao_tipo": "string",
+    "orgao_descricao": "string",
+    "orgao_contato": "string",
+    "orgao_endereco": "string",
+    "orgao_criado_por": "string",
+    "orgao_gabinete": "string"
+}</pre>
+                        </div>
+                    </div>
+
+                    <!-- PUT -->
+                    <div class="endpoint put">
+                        <span class="method put-method">PUT</span>
+                        <code class="ms-2">/api/orgao/{id}</code>
+                        <div class="mt-3">
+                            <h5>Parâmetros URL</h5>
+                            <pre>id: string (UUID do órgão)</pre>
+                            <h5>Parâmetros (JSON)</h5>
+                            <pre>{
+    "orgao_nome": "string",
+    "orgao_tipo": "string",
+    "orgao_descricao": "string",
+    "orgao_contato": "string",
+    "orgao_endereco": "string"
+}</pre>
+                        </div>
+                    </div>
+
+                    <!-- DELETE -->
+                    <div class="endpoint delete">
+                        <span class="method delete-method">DELETE</span>
+                        <code class="ms-2">/api/orgao/{id}</code>
+                        <div class="mt-3">
+                            <h5>Parâmetros URL</h5>
+                            <pre>id: string (UUID do órgão)</pre>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Pessoa Tipo -->
+                <section id="pessoa-tipo" class="mb-5">
+                    <h2 class="mb-4">Pessoa Tipo</h2>
+                    
+                    <!-- GET All -->
+                    <div class="endpoint get">
+                        <span class="method get-method">GET</span>
+                        <code class="ms-2">/api/pessoa-tipo/{gabinete}</code>
+                        <div class="mt-3">
+                            <h5>Parâmetros URL</h5>
+                            <pre>gabinete: string (UUID do gabinete)</pre>
+                            <h5>Resposta</h5>
+                            <pre>{
+    "status": "success",
+    "data": [
+        {
+            "pessoa_tipo_id": "string",
+            "pessoa_tipo_nome": "string",
+            "pessoa_tipo_descricao": "string",
+            "pessoa_tipo_criado_por": "string",
+            "pessoa_tipo_gabinete": "string"
+        }
+    ]
+}</pre>
+                        </div>
+                    </div>
+
+                    <!-- GET By ID -->
+                    <div class="endpoint get">
+                        <span class="method get-method">GET</span>
+                        <code class="ms-2">/api/pessoa-tipo/detalhe/{id}</code>
+                        <div class="mt-3">
+                            <h5>Parâmetros URL</h5>
+                            <pre>id: string (UUID do tipo de pessoa)</pre>
+                            <h5>Resposta</h5>
+                            <pre>{
+    "status": "success",
+    "data": {
+        "pessoa_tipo_id": "string",
+        "pessoa_tipo_nome": "string",
+        "pessoa_tipo_descricao": "string",
+        "pessoa_tipo_criado_por": "string",
+        "pessoa_tipo_gabinete": "string"
+    }
+}</pre>
+                        </div>
+                    </div>
+
+                    <!-- POST -->
+                    <div class="endpoint post">
+                        <span class="method post-method">POST</span>
+                        <code class="ms-2">/api/pessoa-tipo</code>
+                        <div class="mt-3">
+                            <h5>Parâmetros (JSON)</h5>
+                            <pre>{
+    "pessoa_tipo_nome": "string",
+    "pessoa_tipo_descricao": "string",
+    "pessoa_tipo_criado_por": "string",
+    "pessoa_tipo_gabinete": "string"
+}</pre>
+                        </div>
+                    </div>
+
+                    <!-- PUT -->
+                    <div class="endpoint put">
+                        <span class="method put-method">PUT</span>
+                        <code class="ms-2">/api/pessoa-tipo/{id}</code>
+                        <div class="mt-3">
+                            <h5>Parâmetros URL</h5>
+                            <pre>id: string (UUID do tipo de pessoa)</pre>
+                            <h5>Parâmetros (JSON)</h5>
+                            <pre>{
+    "pessoa_tipo_nome": "string",
+    "pessoa_tipo_descricao": "string"
+}</pre>
+                        </div>
+                    </div>
+
+                    <!-- DELETE -->
+                    <div class="endpoint delete">
+                        <span class="method delete-method">DELETE</span>
+                        <code class="ms-2">/api/pessoa-tipo/{id}</code>
+                        <div class="mt-3">
+                            <h5>Parâmetros URL</h5>
+                            <pre>id: string (UUID do tipo de pessoa)</pre>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Pessoa Profissao -->
+                <section id="pessoa-profissao" class="mb-5">
+                    <h2 class="mb-4">Pessoa Profissão</h2>
+                    
+                    <!-- GET All -->
+                    <div class="endpoint get">
+                        <span class="method get-method">GET</span>
+                        <code class="ms-2">/api/pessoa-profissao/{gabinete}</code>
+                        <div class="mt-3">
+                            <h5>Parâmetros URL</h5>
+                            <pre>gabinete: string (UUID do gabinete)</pre>
+                            <h5>Resposta</h5>
+                            <pre>{
+    "status": "success",
+    "data": [
+        {
+            "pessoa_profissao_id": "string",
+            "pessoa_profissao_nome": "string",
+            "pessoa_profissao_descricao": "string",
+            "pessoa_profissao_criado_por": "string",
+            "pessoa_profissao_gabinete": "string"
+        }
+    ]
+}</pre>
+                        </div>
+                    </div>
+
+                    <!-- GET By ID -->
+                    <div class="endpoint get">
+                        <span class="method get-method">GET</span>
+                        <code class="ms-2">/api/pessoa-profissao/detalhe/{id}</code>
+                        <div class="mt-3">
+                            <h5>Parâmetros URL</h5>
+                            <pre>id: string (UUID da profissão)</pre>
+                            <h5>Resposta</h5>
+                            <pre>{
+    "status": "success",
+    "data": {
+        "pessoa_profissao_id": "string",
+        "pessoa_profissao_nome": "string",
+        "pessoa_profissao_descricao": "string",
+        "pessoa_profissao_criado_por": "string",
+        "pessoa_profissao_gabinete": "string"
+    }
+}</pre>
+                        </div>
+                    </div>
+
+                    <!-- POST -->
+                    <div class="endpoint post">
+                        <span class="method post-method">POST</span>
+                        <code class="ms-2">/api/pessoa-profissao</code>
+                        <div class="mt-3">
+                            <h5>Parâmetros (JSON)</h5>
+                            <pre>{
+    "pessoa_profissao_nome": "string",
+    "pessoa_profissao_descricao": "string",
+    "pessoa_profissao_criado_por": "string",
+    "pessoa_profissao_gabinete": "string"
+}</pre>
+                        </div>
+                    </div>
+
+                    <!-- PUT -->
+                    <div class="endpoint put">
+                        <span class="method put-method">PUT</span>
+                        <code class="ms-2">/api/pessoa-profissao/{id}</code>
+                        <div class="mt-3">
+                            <h5>Parâmetros URL</h5>
+                            <pre>id: string (UUID da profissão)</pre>
+                            <h5>Parâmetros (JSON)</h5>
+                            <pre>{
+    "pessoa_profissao_nome": "string",
+    "pessoa_profissao_descricao": "string"
+}</pre>
+                        </div>
+                    </div>
+
+                    <!-- DELETE -->
+                    <div class="endpoint delete">
+                        <span class="method delete-method">DELETE</span>
+                        <code class="ms-2">/api/pessoa-profissao/{id}</code>
+                        <div class="mt-3">
+                            <h5>Parâmetros URL</h5>
+                            <pre>id: string (UUID da profissão)</pre>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Pessoa -->
+                <section id="pessoa" class="mb-5">
+                    <h2 class="mb-4">Pessoa</h2>
+                    
+                    <!-- GET All -->
+                    <div class="endpoint get">
+                        <span class="method get-method">GET</span>
+                        <code class="ms-2">/api/pessoa/{gabinete}</code>
+                        <div class="mt-3">
+                            <h5>Parâmetros URL</h5>
+                            <pre>gabinete: string (UUID do gabinete)</pre>
+                            <h5>Resposta</h5>
+                            <pre>{
+    "status": "success",
+    "data": [
+        {
+            "pessoa_id": "string",
+            "pessoa_nome": "string",
+            "pessoa_tipo": "string",
+            "pessoa_profissao": "string",
+            "pessoa_cpf": "string",
+            "pessoa_rg": "string",
+            "pessoa_email": "string",
+            "pessoa_telefone": "string",
+            "pessoa_endereco": "string",
+            "pessoa_criado_por": "string",
+            "pessoa_gabinete": "string"
+        }
+    ]
+}</pre>
+                        </div>
+                    </div>
+
+                    <!-- GET By ID -->
+                    <div class="endpoint get">
+                        <span class="method get-method">GET</span>
+                        <code class="ms-2">/api/pessoa/detalhe/{id}</code>
+                        <div class="mt-3">
+                            <h5>Parâmetros URL</h5>
+                            <pre>id: string (UUID da pessoa)</pre>
+                            <h5>Resposta</h5>
+                            <pre>{
+    "status": "success",
+    "data": {
+        "pessoa_id": "string",
+        "pessoa_nome": "string",
+        "pessoa_tipo": "string",
+        "pessoa_profissao": "string",
+        "pessoa_cpf": "string",
+        "pessoa_rg": "string",
+        "pessoa_email": "string",
+        "pessoa_telefone": "string",
+        "pessoa_endereco": "string",
+        "pessoa_criado_por": "string",
+        "pessoa_gabinete": "string"
+    }
+}</pre>
+                        </div>
+                    </div>
+
+                    <!-- POST -->
+                    <div class="endpoint post">
+                        <span class="method post-method">POST</span>
+                        <code class="ms-2">/api/pessoa</code>
+                        <div class="mt-3">
+                            <h5>Parâmetros (JSON)</h5>
+                            <pre>{
+    "pessoa_nome": "string",
+    "pessoa_tipo": "string",
+    "pessoa_profissao": "string",
+    "pessoa_cpf": "string",
+    "pessoa_rg": "string",
+    "pessoa_email": "string",
+    "pessoa_telefone": "string",
+    "pessoa_endereco": "string",
+    "pessoa_criado_por": "string",
+    "pessoa_gabinete": "string"
+}</pre>
+                        </div>
+                    </div>
+
+                    <!-- PUT -->
+                    <div class="endpoint put">
+                        <span class="method put-method">PUT</span>
+                        <code class="ms-2">/api/pessoa/{id}</code>
+                        <div class="mt-3">
+                            <h5>Parâmetros URL</h5>
+                            <pre>id: string (UUID da pessoa)</pre>
+                            <h5>Parâmetros (JSON)</h5>
+                            <pre>{
+    "pessoa_nome": "string",
+    "pessoa_tipo": "string",
+    "pessoa_profissao": "string",
+    "pessoa_cpf": "string",
+    "pessoa_rg": "string",
+    "pessoa_email": "string",
+    "pessoa_telefone": "string",
+    "pessoa_endereco": "string"
+}</pre>
+                        </div>
+                    </div>
+
+                    <!-- DELETE -->
+                    <div class="endpoint delete">
+                        <span class="method delete-method">DELETE</span>
+                        <code class="ms-2">/api/pessoa/{id}</code>
+                        <div class="mt-3">
+                            <h5>Parâmetros URL</h5>
+                            <pre>id: string (UUID da pessoa)</pre>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Clipping -->
+                <section id="clipping" class="mb-5">
+                    <h2 class="mb-4">Clipping</h2>
+                    
+                    <!-- GET All -->
+                    <div class="endpoint get">
+                        <span class="method get-method">GET</span>
+                        <code class="ms-2">/api/clipping/{gabinete}</code>
+                        <div class="mt-3">
+                            <h5>Parâmetros URL</h5>
+                            <pre>gabinete: string (UUID do gabinete)</pre>
+                            <h5>Resposta</h5>
+                            <pre>{
+    "status": "success",
+    "data": [
+        {
+            "clipping_id": "string",
+            "clipping_titulo": "string",
+            "clipping_conteudo": "string",
+            "clipping_tipo": "string",
+            "clipping_fonte": "string",
+            "clipping_data": "string",
+            "clipping_link": "string",
+            "clipping_arquivo": "string",
+            "clipping_arquivo_nome": "string",
+            "clipping_arquivo_tipo": "string",
+            "clipping_arquivo_tamanho": "number",
+            "clipping_tags": "string",
+            "clipping_informacoes": "string",
+            "clipping_criado_por": "string",
+            "clipping_gabinete": "string"
+        }
+    ]
+}</pre>
+                        </div>
+                    </div>
+
+                    <!-- POST -->
+                    <div class="endpoint post">
+                        <span class="method post-method">POST</span>
+                        <code class="ms-2">/api/clipping</code>
+                        <div class="mt-3">
+                            <h5>Parâmetros (JSON)</h5>
+                            <pre>{
+    "clipping_titulo": "string",
+    "clipping_conteudo": "string",
+    "clipping_tipo": "string",
+    "clipping_fonte": "string",
+    "clipping_data": "string",
+    "clipping_link": "string",
+    "clipping_arquivo": "string",
+    "clipping_tags": "string",
+    "clipping_informacoes": "string",
+    "clipping_criado_por": "string",
+    "clipping_gabinete": "string"
+}</pre>
+                        </div>
+                    </div>
+
+                    <!-- PUT -->
+                    <div class="endpoint put">
+                        <span class="method put-method">PUT</span>
+                        <code class="ms-2">/api/clipping/{id}</code>
+                        <div class="mt-3">
+                            <h5>Parâmetros URL</h5>
+                            <pre>id: string (UUID do clipping)</pre>
+                            <h5>Parâmetros (JSON)</h5>
+                            <pre>{
+    "clipping_titulo": "string",
+    "clipping_conteudo": "string",
+    "clipping_tipo": "string",
+    "clipping_fonte": "string",
+    "clipping_data": "string",
+    "clipping_link": "string",
+    "clipping_arquivo": "string",
+    "clipping_tags": "string",
+    "clipping_informacoes": "string"
+}</pre>
+                        </div>
+                    </div>
+
+                    <!-- DELETE -->
+                    <div class="endpoint delete">
+                        <span class="method delete-method">DELETE</span>
+                        <code class="ms-2">/api/clipping/{id}</code>
+                        <div class="mt-3">
+                            <h5>Parâmetros URL</h5>
+                            <pre>id: string (UUID do clipping)</pre>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Clipping Tipo -->
+                <section id="clipping-tipo" class="mb-5">
+                    <h2 class="mb-4">Clipping Tipo</h2>
+                    
+                    <!-- GET All -->
+                    <div class="endpoint get">
+                        <span class="method get-method">GET</span>
+                        <code class="ms-2">/api/clipping-tipo/{gabinete}</code>
+                        <div class="mt-3">
+                            <h5>Parâmetros URL</h5>
+                            <pre>gabinete: string (UUID do gabinete)</pre>
+                            <h5>Resposta</h5>
+                            <pre>{
+    "status": "success",
+    "data": [
+        {
+            "clipping_tipo_id": "string",
+            "clipping_tipo_nome": "string",
+            "clipping_tipo_descricao": "string",
+            "clipping_tipo_criado_por": "string",
+            "clipping_tipo_gabinete": "string"
+        }
+    ]
+}</pre>
+                        </div>
+                    </div>
+
+                    <!-- POST -->
+                    <div class="endpoint post">
+                        <span class="method post-method">POST</span>
+                        <code class="ms-2">/api/clipping-tipo</code>
+                        <div class="mt-3">
+                            <h5>Parâmetros (JSON)</h5>
+                            <pre>{
+    "clipping_tipo_nome": "string",
+    "clipping_tipo_descricao": "string",
+    "clipping_tipo_criado_por": "string",
+    "clipping_tipo_gabinete": "string"
+}</pre>
+                        </div>
+                    </div>
+
+                    <!-- PUT -->
+                    <div class="endpoint put">
+                        <span class="method put-method">PUT</span>
+                        <code class="ms-2">/api/clipping-tipo/{id}</code>
+                        <div class="mt-3">
+                            <h5>Parâmetros URL</h5>
+                            <pre>id: string (UUID do tipo de clipping)</pre>
+                            <h5>Parâmetros (JSON)</h5>
+                            <pre>{
+    "clipping_tipo_nome": "string",
+    "clipping_tipo_descricao": "string"
+}</pre>
+                        </div>
+                    </div>
+
+                    <!-- DELETE -->
+                    <div class="endpoint delete">
+                        <span class="method delete-method">DELETE</span>
+                        <code class="ms-2">/api/clipping-tipo/{id}</code>
+                        <div class="mt-3">
+                            <h5>Parâmetros URL</h5>
+                            <pre>id: string (UUID do tipo de clipping)</pre>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Documento Tipo -->
+                <section id="documento-tipo" class="mb-5">
+                    <h2 class="mb-4">Documento Tipo</h2>
+                    
+                    <!-- GET All -->
+                    <div class="endpoint get">
+                        <span class="method get-method">GET</span>
+                        <code class="ms-2">/api/documento-tipo/{gabinete}</code>
+                        <div class="mt-3">
+                            <h5>Parâmetros URL</h5>
+                            <pre>gabinete: string (UUID do gabinete)</pre>
+                            <h5>Resposta</h5>
+                            <pre>{
+    "status": "success",
+    "data": [
+        {
+            "documento_tipo_id": "string",
+            "documento_tipo_nome": "string",
+            "documento_tipo_descricao": "string",
+            "documento_tipo_criado_por": "string",
+            "documento_tipo_gabinete": "string"
+        }
+    ]
+}</pre>
+                        </div>
+                    </div>
+
+                    <!-- GET By ID -->
+                    <div class="endpoint get">
+                        <span class="method get-method">GET</span>
+                        <code class="ms-2">/api/documento-tipo/detalhe/{id}</code>
+                        <div class="mt-3">
+                            <h5>Parâmetros URL</h5>
+                            <pre>id: string (UUID do tipo de documento)</pre>
+                            <h5>Resposta</h5>
+                            <pre>{
+    "status": "success",
+    "data": {
+        "documento_tipo_id": "string",
+        "documento_tipo_nome": "string",
+        "documento_tipo_descricao": "string",
+        "documento_tipo_criado_por": "string",
+        "documento_tipo_gabinete": "string"
+    }
+}</pre>
+                        </div>
+                    </div>
+
+                    <!-- POST -->
+                    <div class="endpoint post">
+                        <span class="method post-method">POST</span>
+                        <code class="ms-2">/api/documento-tipo</code>
+                        <div class="mt-3">
+                            <h5>Parâmetros (JSON)</h5>
+                            <pre>{
+    "documento_tipo_nome": "string",
+    "documento_tipo_descricao": "string",
+    "documento_tipo_criado_por": "string",
+    "documento_tipo_gabinete": "string"
+}</pre>
+                        </div>
+                    </div>
+
+                    <!-- PUT -->
+                    <div class="endpoint put">
+                        <span class="method put-method">PUT</span>
+                        <code class="ms-2">/api/documento-tipo/{id}</code>
+                        <div class="mt-3">
+                            <h5>Parâmetros URL</h5>
+                            <pre>id: string (UUID do tipo de documento)</pre>
+                            <h5>Parâmetros (JSON)</h5>
+                            <pre>{
+    "documento_tipo_nome": "string",
+    "documento_tipo_descricao": "string"
+}</pre>
+                        </div>
+                    </div>
+
+                    <!-- DELETE -->
+                    <div class="endpoint delete">
+                        <span class="method delete-method">DELETE</span>
+                        <code class="ms-2">/api/documento-tipo/{id}</code>
+                        <div class="mt-3">
+                            <h5>Parâmetros URL</h5>
+                            <pre>id: string (UUID do tipo de documento)</pre>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Documento -->
+                <section id="documento" class="mb-5">
+                    <h2 class="mb-4">Documento</h2>
+                    
+                    <!-- GET All -->
+                    <div class="endpoint get">
+                        <span class="method get-method">GET</span>
+                        <code class="ms-2">/api/documento/{gabinete}</code>
+                        <div class="mt-3">
+                            <h5>Parâmetros URL</h5>
+                            <pre>gabinete: string (UUID do gabinete)</pre>
+                            <h5>Resposta</h5>
+                            <pre>{
+    "status": "success",
+    "data": [
+        {
+            "documento_id": "string",
+            "documento_tipo": "string",
+            "documento_titulo": "string",
+            "documento_descricao": "string",
+            "documento_arquivo": "string",
+            "documento_arquivo_nome": "string",
+            "documento_arquivo_tipo": "string",
+            "documento_arquivo_tamanho": "number",
+            "documento_criado_por": "string",
+            "documento_gabinete": "string"
+        }
+    ]
+}</pre>
+                        </div>
+                    </div>
+
+                    <!-- GET By ID -->
+                    <div class="endpoint get">
+                        <span class="method get-method">GET</span>
+                        <code class="ms-2">/api/documento/detalhe/{id}</code>
+                        <div class="mt-3">
+                            <h5>Parâmetros URL</h5>
+                            <pre>id: string (UUID do documento)</pre>
+                            <h5>Resposta</h5>
+                            <pre>{
+    "status": "success",
+    "data": {
+        "documento_id": "string",
+        "documento_tipo": "string",
+        "documento_titulo": "string",
+        "documento_descricao": "string",
+        "documento_arquivo": "string",
+        "documento_arquivo_nome": "string",
+        "documento_arquivo_tipo": "string",
+        "documento_arquivo_tamanho": "number",
+        "documento_criado_por": "string",
+        "documento_gabinete": "string"
+    }
+}</pre>
+                        </div>
+                    </div>
+
+                    <!-- POST -->
+                    <div class="endpoint post">
+                        <span class="method post-method">POST</span>
+                        <code class="ms-2">/api/documento</code>
+                        <div class="mt-3">
+                            <h5>Parâmetros (JSON)</h5>
+                            <pre>{
+    "documento_tipo": "string",
+    "documento_titulo": "string",
+    "documento_descricao": "string",
+    "documento_arquivo": "string",
+    "documento_arquivo_nome": "string",
+    "documento_arquivo_tipo": "string",
+    "documento_arquivo_tamanho": "number",
+    "documento_criado_por": "string",
+    "documento_gabinete": "string"
+}</pre>
+                        </div>
+                    </div>
+
+                    <!-- PUT -->
+                    <div class="endpoint put">
+                        <span class="method put-method">PUT</span>
+                        <code class="ms-2">/api/documento/{id}</code>
+                        <div class="mt-3">
+                            <h5>Parâmetros URL</h5>
+                            <pre>id: string (UUID do documento)</pre>
+                            <h5>Parâmetros (JSON)</h5>
+                            <pre>{
+    "documento_tipo": "string",
+    "documento_titulo": "string",
+    "documento_descricao": "string",
+    "documento_arquivo": "string",
+    "documento_arquivo_nome": "string",
+    "documento_arquivo_tipo": "string",
+    "documento_arquivo_tamanho": "number"
+}</pre>
+                        </div>
+                    </div>
+
+                    <!-- DELETE -->
+                    <div class="endpoint delete">
+                        <span class="method delete-method">DELETE</span>
+                        <code class="ms-2">/api/documento/{id}</code>
+                        <div class="mt-3">
+                            <h5>Parâmetros URL</h5>
+                            <pre>id: string (UUID do documento)</pre>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Emenda Status -->
+                <section id="emenda-status" class="mb-5">
+                    <h2 class="mb-4">Emenda Status</h2>
+                    
+                    <!-- GET All -->
+                    <div class="endpoint get">
+                        <span class="method get-method">GET</span>
+                        <code class="ms-2">/api/emenda-status/{gabinete}</code>
+                        <div class="mt-3">
+                            <h5>Parâmetros URL</h5>
+                            <pre>gabinete: string (UUID do gabinete)</pre>
+                            <h5>Resposta</h5>
+                            <pre>{
+    "status": "success",
+    "data": [
+        {
+            "emenda_status_id": "string",
+            "emenda_status_nome": "string",
+            "emenda_status_descricao": "string",
+            "emenda_status_criado_por": "string",
+            "emenda_status_gabinete": "string"
+        }
+    ]
+}</pre>
+                        </div>
+                    </div>
+
+                    <!-- GET By ID -->
+                    <div class="endpoint get">
+                        <span class="method get-method">GET</span>
+                        <code class="ms-2">/api/emenda-status/detalhe/{id}</code>
+                        <div class="mt-3">
+                            <h5>Parâmetros URL</h5>
+                            <pre>id: string (UUID do status de emenda)</pre>
+                            <h5>Resposta</h5>
+                            <pre>{
+    "status": "success",
+    "data": {
+        "emenda_status_id": "string",
+        "emenda_status_nome": "string",
+        "emenda_status_descricao": "string",
+        "emenda_status_criado_por": "string",
+        "emenda_status_gabinete": "string"
+    }
+}</pre>
+                        </div>
+                    </div>
+
+                    <!-- POST -->
+                    <div class="endpoint post">
+                        <span class="method post-method">POST</span>
+                        <code class="ms-2">/api/emenda-status</code>
+                        <div class="mt-3">
+                            <h5>Parâmetros (JSON)</h5>
+                            <pre>{
+    "emenda_status_nome": "string",
+    "emenda_status_descricao": "string",
+    "emenda_status_criado_por": "string",
+    "emenda_status_gabinete": "string"
+}</pre>
+                        </div>
+                    </div>
+
+                    <!-- PUT -->
+                    <div class="endpoint put">
+                        <span class="method put-method">PUT</span>
+                        <code class="ms-2">/api/emenda-status/{id}</code>
+                        <div class="mt-3">
+                            <h5>Parâmetros URL</h5>
+                            <pre>id: string (UUID do status de emenda)</pre>
+                            <h5>Parâmetros (JSON)</h5>
+                            <pre>{
+    "emenda_status_nome": "string",
+    "emenda_status_descricao": "string"
+}</pre>
+                        </div>
+                    </div>
+
+                    <!-- DELETE -->
+                    <div class="endpoint delete">
+                        <span class="method delete-method">DELETE</span>
+                        <code class="ms-2">/api/emenda-status/{id}</code>
+                        <div class="mt-3">
+                            <h5>Parâmetros URL</h5>
+                            <pre>id: string (UUID do status de emenda)</pre>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Emenda Objetivo -->
+                <section id="emenda-objetivo" class="mb-5">
+                    <h2 class="mb-4">Emenda Objetivo</h2>
+                    
+                    <!-- GET All -->
+                    <div class="endpoint get">
+                        <span class="method get-method">GET</span>
+                        <code class="ms-2">/api/emenda-objetivo/{gabinete}</code>
+                        <div class="mt-3">
+                            <h5>Parâmetros URL</h5>
+                            <pre>gabinete: string (UUID do gabinete)</pre>
+                            <h5>Resposta</h5>
+                            <pre>{
+    "status": "success",
+    "data": [
+        {
+            "emenda_objetivo_id": "string",
+            "emenda_objetivo_nome": "string",
+            "emenda_objetivo_descricao": "string",
+            "emenda_objetivo_criado_por": "string",
+            "emenda_objetivo_gabinete": "string"
+        }
+    ]
+}</pre>
+                        </div>
+                    </div>
+
+                    <!-- GET By ID -->
+                    <div class="endpoint get">
+                        <span class="method get-method">GET</span>
+                        <code class="ms-2">/api/emenda-objetivo/detalhe/{id}</code>
+                        <div class="mt-3">
+                            <h5>Parâmetros URL</h5>
+                            <pre>id: string (UUID do objetivo de emenda)</pre>
+                            <h5>Resposta</h5>
+                            <pre>{
+    "status": "success",
+    "data": {
+        "emenda_objetivo_id": "string",
+        "emenda_objetivo_nome": "string",
+        "emenda_objetivo_descricao": "string",
+        "emenda_objetivo_criado_por": "string",
+        "emenda_objetivo_gabinete": "string"
+    }
+}</pre>
+                        </div>
+                    </div>
+
+                    <!-- POST -->
+                    <div class="endpoint post">
+                        <span class="method post-method">POST</span>
+                        <code class="ms-2">/api/emenda-objetivo</code>
+                        <div class="mt-3">
+                            <h5>Parâmetros (JSON)</h5>
+                            <pre>{
+    "emenda_objetivo_nome": "string",
+    "emenda_objetivo_descricao": "string",
+    "emenda_objetivo_criado_por": "string",
+    "emenda_objetivo_gabinete": "string"
+}</pre>
+                        </div>
+                    </div>
+
+                    <!-- PUT -->
+                    <div class="endpoint put">
+                        <span class="method put-method">PUT</span>
+                        <code class="ms-2">/api/emenda-objetivo/{id}</code>
+                        <div class="mt-3">
+                            <h5>Parâmetros URL</h5>
+                            <pre>id: string (UUID do objetivo de emenda)</pre>
+                            <h5>Parâmetros (JSON)</h5>
+                            <pre>{
+    "emenda_objetivo_nome": "string",
+    "emenda_objetivo_descricao": "string"
+}</pre>
+                        </div>
+                    </div>
+
+                    <!-- DELETE -->
+                    <div class="endpoint delete">
+                        <span class="method delete-method">DELETE</span>
+                        <code class="ms-2">/api/emenda-objetivo/{id}</code>
+                        <div class="mt-3">
+                            <h5>Parâmetros URL</h5>
+                            <pre>id: string (UUID do objetivo de emenda)</pre>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Emenda -->
+                <section id="emenda" class="mb-5">
+                    <h2 class="mb-4">Emenda</h2>
+                    
+                    <!-- GET All -->
+                    <div class="endpoint get">
+                        <span class="method get-method">GET</span>
+                        <code class="ms-2">/api/emenda/{gabinete}</code>
+                        <div class="mt-3">
+                            <h5>Parâmetros URL</h5>
+                            <pre>gabinete: string (UUID do gabinete)</pre>
+                            <h5>Resposta</h5>
+                            <pre>{
+    "status": "success",
+    "data": [
+        {
+            "emenda_id": "string",
+            "emenda_numero": "string",
+            "emenda_ano": "string",
+            "emenda_valor": "number",
+            "emenda_objeto": "string",
+            "emenda_objetivo": "string",
+            "emenda_orgao": "string",
+            "emenda_status": "string",
+            "emenda_observacoes": "string",
+            "emenda_criado_por": "string",
+            "emenda_gabinete": "string"
+        }
+    ]
+}</pre>
+                        </div>
+                    </div>
+
+                    <!-- GET By ID -->
+                    <div class="endpoint get">
+                        <span class="method get-method">GET</span>
+                        <code class="ms-2">/api/emenda/detalhe/{id}</code>
+                        <div class="mt-3">
+                            <h5>Parâmetros URL</h5>
+                            <pre>id: string (UUID da emenda)</pre>
+                            <h5>Resposta</h5>
+                            <pre>{
+    "status": "success",
+    "data": {
+        "emenda_id": "string",
+        "emenda_numero": "string",
+        "emenda_ano": "string",
+        "emenda_valor": "number",
+        "emenda_objeto": "string",
+        "emenda_objetivo": "string",
+        "emenda_orgao": "string",
+        "emenda_status": "string",
+        "emenda_observacoes": "string",
+        "emenda_criado_por": "string",
+        "emenda_gabinete": "string"
+    }
+}</pre>
+                        </div>
+                    </div>
+
+                    <!-- POST -->
+                    <div class="endpoint post">
+                        <span class="method post-method">POST</span>
+                        <code class="ms-2">/api/emenda</code>
+                        <div class="mt-3">
+                            <h5>Parâmetros (JSON)</h5>
+                            <pre>{
+    "emenda_numero": "string",
+    "emenda_ano": "string",
+    "emenda_valor": "number",
+    "emenda_objeto": "string",
+    "emenda_objetivo": "string",
+    "emenda_orgao": "string",
+    "emenda_status": "string",
+    "emenda_observacoes": "string",
+    "emenda_criado_por": "string",
+    "emenda_gabinete": "string"
+}</pre>
+                        </div>
+                    </div>
+
+                    <!-- PUT -->
+                    <div class="endpoint put">
+                        <span class="method put-method">PUT</span>
+                        <code class="ms-2">/api/emenda/{id}</code>
+                        <div class="mt-3">
+                            <h5>Parâmetros URL</h5>
+                            <pre>id: string (UUID da emenda)</pre>
+                            <h5>Parâmetros (JSON)</h5>
+                            <pre>{
+    "emenda_numero": "string",
+    "emenda_ano": "string",
+    "emenda_valor": "number",
+    "emenda_objeto": "string",
+    "emenda_objetivo": "string",
+    "emenda_orgao": "string",
+    "emenda_status": "string",
+    "emenda_observacoes": "string"
+}</pre>
+                        </div>
+                    </div>
+
+                    <!-- DELETE -->
+                    <div class="endpoint delete">
+                        <span class="method delete-method">DELETE</span>
+                        <code class="ms-2">/api/emenda/{id}</code>
+                        <div class="mt-3">
+                            <h5>Parâmetros URL</h5>
+                            <pre>id: string (UUID da emenda)</pre>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Postagem Status -->
+                <section id="postagem-status" class="mb-5">
+                    <h2 class="mb-4">Postagem Status</h2>
+                    
+                    <!-- GET All -->
+                    <div class="endpoint get">
+                        <span class="method get-method">GET</span>
+                        <code class="ms-2">/api/postagem-status/{gabinete}</code>
+                        <div class="mt-3">
+                            <h5>Parâmetros URL</h5>
+                            <pre>gabinete: string (UUID do gabinete)</pre>
+                            <h5>Resposta</h5>
+                            <pre>{
+    "status": "success",
+    "data": [
+        {
+            "postagem_status_id": "string",
+            "postagem_status_nome": "string",
+            "postagem_status_descricao": "string",
+            "postagem_status_criado_por": "string",
+            "postagem_status_gabinete": "string"
+        }
+    ]
+}</pre>
+                        </div>
+                    </div>
+
+                    <!-- GET By ID -->
+                    <div class="endpoint get">
+                        <span class="method get-method">GET</span>
+                        <code class="ms-2">/api/postagem-status/detalhe/{id}</code>
+                        <div class="mt-3">
+                            <h5>Parâmetros URL</h5>
+                            <pre>id: string (UUID do status de postagem)</pre>
+                            <h5>Resposta</h5>
+                            <pre>{
+    "status": "success",
+    "data": {
+        "postagem_status_id": "string",
+        "postagem_status_nome": "string",
+        "postagem_status_descricao": "string",
+        "postagem_status_criado_por": "string",
+        "postagem_status_gabinete": "string"
+    }
+}</pre>
+                        </div>
+                    </div>
+
+                    <!-- POST -->
+                    <div class="endpoint post">
+                        <span class="method post-method">POST</span>
+                        <code class="ms-2">/api/postagem-status</code>
+                        <div class="mt-3">
+                            <h5>Parâmetros (JSON)</h5>
+                            <pre>{
+    "postagem_status_nome": "string",
+    "postagem_status_descricao": "string",
+    "postagem_status_criado_por": "string",
+    "postagem_status_gabinete": "string"
+}</pre>
+                        </div>
+                    </div>
+
+                    <!-- PUT -->
+                    <div class="endpoint put">
+                        <span class="method put-method">PUT</span>
+                        <code class="ms-2">/api/postagem-status/{id}</code>
+                        <div class="mt-3">
+                            <h5>Parâmetros URL</h5>
+                            <pre>id: string (UUID do status de postagem)</pre>
+                            <h5>Parâmetros (JSON)</h5>
+                            <pre>{
+    "postagem_status_nome": "string",
+    "postagem_status_descricao": "string"
+}</pre>
+                        </div>
+                    </div>
+
+                    <!-- DELETE -->
+                    <div class="endpoint delete">
+                        <span class="method delete-method">DELETE</span>
+                        <code class="ms-2">/api/postagem-status/{id}</code>
+                        <div class="mt-3">
+                            <h5>Parâmetros URL</h5>
+                            <pre>id: string (UUID do status de postagem)</pre>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Postagem -->
+                <section id="postagem" class="mb-5">
+                    <h2 class="mb-4">Postagem</h2>
+                    
+                    <!-- GET All -->
+                    <div class="endpoint get">
+                        <span class="method get-method">GET</span>
+                        <code class="ms-2">/api/postagem/{gabinete}</code>
+                        <div class="mt-3">
+                            <h5>Parâmetros URL</h5>
+                            <pre>gabinete: string (UUID do gabinete)</pre>
+                            <h5>Resposta</h5>
+                            <pre>{
+    "status": "success",
+    "data": [
+        {
+            "postagem_id": "string",
+            "postagem_titulo": "string",
+            "postagem_conteudo": "string",
+            "postagem_data": "string",
+            "postagem_status": "string",
+            "postagem_imagem": "string",
+            "postagem_imagem_nome": "string",
+            "postagem_imagem_tipo": "string",
+            "postagem_imagem_tamanho": "number",
+            "postagem_tags": "string",
+            "postagem_criado_por": "string",
+            "postagem_gabinete": "string"
+        }
+    ]
+}</pre>
+                        </div>
+                    </div>
+
+                    <!-- GET By ID -->
+                    <div class="endpoint get">
+                        <span class="method get-method">GET</span>
+                        <code class="ms-2">/api/postagem/detalhe/{id}</code>
+                        <div class="mt-3">
+                            <h5>Parâmetros URL</h5>
+                            <pre>id: string (UUID da postagem)</pre>
+                            <h5>Resposta</h5>
+                            <pre>{
+    "status": "success",
+    "data": {
+        "postagem_id": "string",
+        "postagem_titulo": "string",
+        "postagem_conteudo": "string",
+        "postagem_data": "string",
+        "postagem_status": "string",
+        "postagem_imagem": "string",
+        "postagem_imagem_nome": "string",
+        "postagem_imagem_tipo": "string",
+        "postagem_imagem_tamanho": "number",
+        "postagem_tags": "string",
+        "postagem_criado_por": "string",
+        "postagem_gabinete": "string"
+    }
+}</pre>
+                        </div>
+                    </div>
+
+                    <!-- POST -->
+                    <div class="endpoint post">
+                        <span class="method post-method">POST</span>
+                        <code class="ms-2">/api/postagem</code>
+                        <div class="mt-3">
+                            <h5>Parâmetros (JSON)</h5>
+                            <pre>{
+    "postagem_titulo": "string",
+    "postagem_conteudo": "string",
+    "postagem_data": "string",
+    "postagem_status": "string",
+    "postagem_imagem": "string",
+    "postagem_imagem_nome": "string",
+    "postagem_imagem_tipo": "string",
+    "postagem_imagem_tamanho": "number",
+    "postagem_tags": "string",
+    "postagem_criado_por": "string",
+    "postagem_gabinete": "string"
+}</pre>
+                        </div>
+                    </div>
+
+                    <!-- PUT -->
+                    <div class="endpoint put">
+                        <span class="method put-method">PUT</span>
+                        <code class="ms-2">/api/postagem/{id}</code>
+                        <div class="mt-3">
+                            <h5>Parâmetros URL</h5>
+                            <pre>id: string (UUID da postagem)</pre>
+                            <h5>Parâmetros (JSON)</h5>
+                            <pre>{
+    "postagem_titulo": "string",
+    "postagem_conteudo": "string",
+    "postagem_data": "string",
+    "postagem_status": "string",
+    "postagem_imagem": "string",
+    "postagem_imagem_nome": "string",
+    "postagem_imagem_tipo": "string",
+    "postagem_imagem_tamanho": "number",
+    "postagem_tags": "string"
+}</pre>
+                        </div>
+                    </div>
+
+                    <!-- DELETE -->
+                    <div class="endpoint delete">
+                        <span class="method delete-method">DELETE</span>
+                        <code class="ms-2">/api/postagem/{id}</code>
+                        <div class="mt-3">
+                            <h5>Parâmetros URL</h5>
+                            <pre>id: string (UUID da postagem)</pre>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Add similar sections for other endpoints -->
+
+            </div>
+        </div>
+    </div>
+
+    <footer class="bg-dark text-white py-4 mt-5">
+        <div class="container text-center">
+            <p class="mb-0">© 2024 API Documentation. Todos os direitos reservados.</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // Active state for nav items on scroll
+        window.addEventListener('scroll', () => {
+            let current = '';
+            document.querySelectorAll('section').forEach(section => {
+                const sectionTop = section.offsetTop;
+                if (pageYOffset >= sectionTop - 60) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href').substring(1) === current) {
+                    link.classList.add('active');
+                }
+            });
+        });
+    </script>
+</body>
+</html> 
