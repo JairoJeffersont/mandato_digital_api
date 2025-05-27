@@ -23,10 +23,10 @@
 
 return [
     'db' => [
-        'host' => 'casadojairo.ddns.net',
+        'host' => 'localhost',
         'database' => 'api',
-        'username' => 'jairo',
-        'password' => 'intell01',
+        'username' => 'root',
+        'password' => 'root',
         'charset' => 'utf8mb4'
     ],
     'app' => [

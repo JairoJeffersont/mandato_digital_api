@@ -36,7 +36,7 @@ use Slim\Routing\RouteCollectorProxy;
 
 $app->group('/api', function (RouteCollectorProxy $group) {
     // Public routes
-    
+
     $group->post('/login', [AuthController::class, 'login']);
     $group->get('/gabinete-tipo', [GabineteTipoController::class, 'getAll']);
     $group->post('/usuario', [UsuarioController::class, 'create']);
@@ -169,5 +169,6 @@ $app->group('/api', function (RouteCollectorProxy $group) {
         $group->post('/clipping', [ClippingController::class, 'create']);
         $group->put('/clipping/{id}', [ClippingController::class, 'update']);
         $group->delete('/clipping/{id}', [ClippingController::class, 'delete']);
-    })->add(new JwtMiddleware());
+        //})->add(new JwtMiddleware());
+    });
 });

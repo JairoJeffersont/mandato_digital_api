@@ -30,7 +30,7 @@ class ErrorHandlerMiddleware implements MiddlewareInterface
                 $response,
                 'method_not_allowed',
                 405,
-                'Método não permitido para esta rota',
+                'Método não permitido para esta rota ou algum parametro faltando',
                 [],
                 []
             );
